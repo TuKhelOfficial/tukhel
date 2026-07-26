@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/tukhel">
       <div className="min-h-screen flex flex-col">
         <Navbar />
 
