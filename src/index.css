@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Global Light Mode Defaults */
+body {
+  @apply bg-gray-100 text-gray-800 transition-colors duration-300 font-sans;
+}
+
+/* Global Dark Mode Defaults */
+.dark body {
+  @apply bg-gray-950 text-gray-100;
+}
