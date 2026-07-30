@@ -6,7 +6,7 @@ export default function TurfCard({ turf }) {
   const [suggestionText, setSuggestionText] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const placeholderImage = "https://images.unsplash.com/photo-1529900965798-240f1c4e7fcd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+  const placeholderImage = "https://images.unsplash.com/photos-1529900965798-240f1c4e7fcd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
   
   const createSlug = (name) => {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
