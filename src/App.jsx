@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import TurfDetailsPage from './pages/TurfDetailsPage';
 import Footer from './components/Footer';
+import ListTurfModal from './components/ListTurfModal'; // Import modal here
 
 function App() {
+  // Global state for the List Turf Modal
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
+
   return (
     <BrowserRouter basename="/tukhel">
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
+      <div className="min-h-screen flex flex-col relative">
+        
+        {/* Pass the open function as a prop */}
+        <Navbar onOpenListModal={() => setIsListModalOpen(true)} />
 
         <main className="flex-grow">
           <Routes>
@@ -31,8 +37,15 @@ function App() {
           </Routes>
         </main>
 
-        <Footer />
+        {/* Pass the open function to Footer as well */}
+        <Footer onOpenListModal={() => setIsListModalOpen(true)} />
       </div>
+
+      {/* Render the modal at the root level */}
+      <ListTurfModal 
+        isOpen={isListModalOpen} 
+        onClose={() => setIsListModalOpen(false)} 
+      />
     </BrowserRouter>
   );
 }
