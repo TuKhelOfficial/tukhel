@@ -48,20 +48,16 @@ export default function TurfDetailsPage() {
   // -------------------------------------------
 
   return (
-    // Clean outer wrapper (inherits from index.css)
-    <div className="pb-12">
+    // UPDATED: Added pb-28 md:pb-12 so the mobile sticky bar doesn't hide your footer!
+    <div className="pb-28 md:pb-12 relative">
 
-      {/* Hero Image Section - Added dark:bg-gray-800 */}
+      {/* Hero Image Section */}
       <div
         className="w-full bg-gray-300 dark:bg-gray-800 relative bg-cover bg-center"
         style={{ backgroundImage: `url('${placeholderImage}')` }}
       >
         <div className="absolute inset-0 bg-black/60 dark:bg-black/70"></div>
 
-        {/* 
-          FIXED: Removed 'absolute bottom-0' and fixed heights.
-          Added 'relative z-10' and vertical padding (py-12 md:py-16) to naturally space the content.
-        */}
         <div className="relative z-10 w-full px-4 py-12 md:py-16 container mx-auto max-w-5xl text-white">
           <Link to="/" className="text-sm font-semibold text-gray-300 hover:text-white mb-6 inline-block tracking-wide">
             &larr; BACK TO DIRECTORY
@@ -84,7 +80,7 @@ export default function TurfDetailsPage() {
 
         {/* Main Content */}
         <div className="md:col-span-2 space-y-8">
-          {/* Card 1: Added dark:bg-gray-900, dark:border-gray-800, dark:text-white */}
+          {/* Card 1: Sports & Amenities */}
           <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 transition-colors duration-300">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Available Sports</h3>
             <div className="flex flex-wrap gap-2">
@@ -110,7 +106,6 @@ export default function TurfDetailsPage() {
           </div>
 
           {/* Card 2: Map Section */}
-          {/* Card 2: Map Section */}
           <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 transition-colors duration-300">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location</h3>
             <div className="bg-gray-100 dark:bg-gray-800 w-full h-64 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition-colors duration-300 relative">
@@ -123,7 +118,6 @@ export default function TurfDetailsPage() {
                 loading="lazy"
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
-                // This is the 100% FREE magic URL! No API key needed.
                 src={`https://maps.google.com/maps?q=${encodeURIComponent(`${turf.name}, ${turf.address}`)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
               ></iframe>
 
@@ -141,7 +135,8 @@ export default function TurfDetailsPage() {
             </p>
             {turf.priceDay !== "Contact Venue" && <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">per hour</p>}
 
-            <div className="space-y-3 mt-6">
+            {/* UPDATED: Added hidden md:block so these only show on Desktop. Mobile uses the sticky bar below. */}
+            <div className="space-y-3 mt-6 hidden md:block">
               {turf.phone ? (
                 <a href={`tel:${turf.phone}`} onClick={handleCallClick} className="block w-full text-center bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-3 rounded-lg font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 border border-transparent dark:border-gray-700">
                   📞 Call Venue
@@ -166,6 +161,44 @@ export default function TurfDetailsPage() {
         </div>
 
       </div>
+
+      {/* --- NEW: MOBILE STICKY BOTTOM BAR --- */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-3 z-50 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.15)]">
+        <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+          
+          {turf.phone ? (
+            <a 
+              href={`tel:${turf.phone}`} 
+              onClick={handleCallClick}
+              className="flex items-center justify-center gap-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white font-bold py-3 px-2 rounded-xl transition-colors text-base"
+            >
+              <span>📞</span> Call
+            </a>
+          ) : (
+             <button disabled className="flex items-center justify-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 font-bold py-3 px-2 rounded-xl cursor-not-allowed text-base">
+              <span>📞</span> Unavailable
+            </button>
+          )}
+
+          {turf.whatsapp ? (
+            <a 
+              href={`https://wa.me/91${turf.whatsapp}?text=Hi,%20I%20saw%20${encodeURIComponent(turf.name)}%20on%20TuKhel%20and%20wanted%20to%20inquire%20about%20slots.`} 
+              onClick={handleWhatsAppClick}
+              target="_blank" 
+              rel="noreferrer"
+              className="flex items-center justify-center gap-1.5 bg-[#25D366] text-white hover:bg-green-600 font-bold py-3 px-2 rounded-xl shadow-md transition-colors text-base"
+            >
+              <span>💬</span> WhatsApp
+            </a>
+          ) : (
+             <button disabled className="flex items-center justify-center gap-1.5 bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 font-bold py-3 px-2 rounded-xl cursor-not-allowed text-base">
+              <span>💬</span> Unavailable
+            </button>
+          )}
+
+        </div>
+      </div>
+
     </div>
   );
 }

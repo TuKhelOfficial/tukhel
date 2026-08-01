@@ -10,7 +10,7 @@ export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isScrolled, setIsScrolled] = useState(false);
-  const itemsPerPage = 9;
+  const itemsPerPage = 6; // Set to multiple of 6
 
   // Track scroll position to show/hide the pinned search bar
   useEffect(() => {
@@ -38,6 +38,18 @@ export default function HomePage() {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
+  };
+
+  // --- NEW: Scroll to the top of the GRID, not the top of the page ---
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    const gridElement = document.getElementById('venues-grid');
+    if (gridElement) {
+      gridElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+    }
   };
 
   return (
@@ -102,8 +114,8 @@ export default function HomePage() {
         </header>
       </div>
 
-      {/* Main Grid Area */}
-      <main className="flex-grow container mx-auto px-4 py-8 sm:py-12 max-w-6xl">
+      {/* Main Grid Area - Added id="venues-grid" and scroll-mt-24 */}
+      <main id="venues-grid" className="flex-grow container mx-auto px-4 py-8 sm:py-12 max-w-6xl scroll-mt-24">
 
         {/* Featured Venues Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 sm:gap-0 mb-6 border-b border-gray-200 dark:border-gray-800 pb-4 transition-colors duration-300">
@@ -128,7 +140,7 @@ export default function HomePage() {
             {totalPages > 1 && (
               <div className="flex justify-center items-center space-x-4 border-t border-gray-200 dark:border-gray-800 pt-8 transition-colors duration-300">
                 <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
                   disabled={currentPage === 1}
                   className="px-4 py-2 sm:px-5 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm"
                 >
@@ -140,7 +152,7 @@ export default function HomePage() {
                 </span>
 
                 <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
                   disabled={currentPage === totalPages}
                   className="px-4 py-2 sm:px-5 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm"
                 >

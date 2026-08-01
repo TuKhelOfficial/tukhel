@@ -26,7 +26,7 @@ export const mockTurfs = [
   {
     id: 3,
     name: "Nishu Sports Legacy",
-    sports: ["Gym", "Fitness", "Box Cricket"],
+    sports: [ "Box Cricket"],
     address: "Narendra Dham Society, Katpur Road, Sikandarpur",
     priceDay: "Contact Venue",
     priceNight: "Contact Venue",
