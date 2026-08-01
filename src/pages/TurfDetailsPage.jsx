@@ -1,15 +1,16 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 import { mockTurfs } from '../data/mockTurfs';
 
 export default function TurfDetailsPage() {
   const params = useParams();
-  const routeParam = params.slug || params.id; 
-  
+  const routeParam = params.slug || params.id;
+
   const createSlug = (name) => {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
   };
-  
+
   const turf = mockTurfs.find(t => createSlug(t.name) === routeParam);
   const placeholderImage = "https://images.unsplash.com/photo-1529900965798-240f1c4e7fcd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
 
@@ -28,17 +29,35 @@ export default function TurfDetailsPage() {
     );
   }
 
+  // --- GOOGLE ANALYTICS TRACKING FUNCTIONS ---
+  const handleWhatsAppClick = () => {
+    ReactGA.event({
+      category: "Lead Generation",
+      action: "Clicked WhatsApp",
+      label: turf.name // Tracks exactly WHICH turf got the message
+    });
+  };
+
+  const handleCallClick = () => {
+    ReactGA.event({
+      category: "Lead Generation",
+      action: "Clicked Call",
+      label: turf.name // Tracks exactly WHICH turf got the call
+    });
+  };
+  // -------------------------------------------
+
   return (
     // Clean outer wrapper (inherits from index.css)
     <div className="pb-12">
-      
+
       {/* Hero Image Section - Added dark:bg-gray-800 */}
-      <div 
+      <div
         className="w-full bg-gray-300 dark:bg-gray-800 relative bg-cover bg-center"
         style={{ backgroundImage: `url('${placeholderImage}')` }}
       >
         <div className="absolute inset-0 bg-black/60 dark:bg-black/70"></div>
-        
+
         {/* 
           FIXED: Removed 'absolute bottom-0' and fixed heights.
           Added 'relative z-10' and vertical padding (py-12 md:py-16) to naturally space the content.
@@ -62,7 +81,7 @@ export default function TurfDetailsPage() {
       </div>
 
       <div className="container mx-auto px-4 max-w-5xl mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-        
+
         {/* Main Content */}
         <div className="md:col-span-2 space-y-8">
           {/* Card 1: Added dark:bg-gray-900, dark:border-gray-800, dark:text-white */}
@@ -75,7 +94,7 @@ export default function TurfDetailsPage() {
                 </span>
               ))}
             </div>
-            
+
             {turf.amenities && turf.amenities.length > 0 && (
               <>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Amenities</h3>
@@ -95,7 +114,7 @@ export default function TurfDetailsPage() {
           <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 transition-colors duration-300">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location</h3>
             <div className="bg-gray-100 dark:bg-gray-800 w-full h-64 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition-colors duration-300 relative">
-              
+
               <iframe
                 title={`Map of ${turf.name}`}
                 width="100%"
@@ -107,7 +126,7 @@ export default function TurfDetailsPage() {
                 // This is the 100% FREE magic URL! No API key needed.
                 src={`https://maps.google.com/maps?q=${encodeURIComponent(`${turf.name}, ${turf.address}`)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
               ></iframe>
-              
+
             </div>
           </div>
         </div>
@@ -124,7 +143,7 @@ export default function TurfDetailsPage() {
 
             <div className="space-y-3 mt-6">
               {turf.phone ? (
-                <a href={`tel:${turf.phone}`} className="block w-full text-center bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-3 rounded-lg font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 border border-transparent dark:border-gray-700">
+                <a href={`tel:${turf.phone}`} onClick={handleCallClick} className="block w-full text-center bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-3 rounded-lg font-bold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 border border-transparent dark:border-gray-700">
                   📞 Call Venue
                 </a>
               ) : (
@@ -134,7 +153,7 @@ export default function TurfDetailsPage() {
               )}
 
               {turf.whatsapp ? (
-                <a href={`https://wa.me/91${turf.whatsapp}?text=Hi,%20I%20saw%20${encodeURIComponent(turf.name)}%20on%20TuKhel%20and%20wanted%20to%20inquire%20about%20slots.`} target="_blank" rel="noreferrer" className="block w-full text-center bg-green-600 dark:bg-green-700 text-white py-3 rounded-lg font-bold hover:bg-green-700 dark:hover:bg-green-600 transition-colors duration-300 shadow-md dark:shadow-none">
+                <a href={`https://wa.me/91${turf.whatsapp}?text=Hi,%20I%20saw%20${encodeURIComponent(turf.name)}%20on%20TuKhel%20and%20wanted%20to%20inquire%20about%20slots.`} onClick={handleWhatsAppClick} target="_blank" rel="noreferrer" className="block w-full text-center bg-green-600 dark:bg-green-700 text-white py-3 rounded-lg font-bold hover:bg-green-700 dark:hover:bg-green-600 transition-colors duration-300 shadow-md dark:shadow-none">
                   💬 Message on WhatsApp
                 </a>
               ) : (

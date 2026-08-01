@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga4'; // Import GA4
 
 export default function TurfCard({ turf }) {
   const [isSuggesting, setIsSuggesting] = useState(false);
@@ -13,6 +14,24 @@ export default function TurfCard({ turf }) {
   };
 
   const turfSlug = createSlug(turf.name);
+
+  // --- GOOGLE ANALYTICS TRACKING HANDLERS ---
+  const handleWhatsAppClick = () => {
+    ReactGA.event({
+      category: "Lead Generation",
+      action: "Clicked WhatsApp - Homepage",
+      label: turf.name
+    });
+  };
+
+  const handleCallClick = () => {
+    ReactGA.event({
+      category: "Lead Generation",
+      action: "Clicked Call - Homepage",
+      label: turf.name
+    });
+  };
+  // ------------------------------------------
 
   const handleSuggestionSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +72,7 @@ export default function TurfCard({ turf }) {
         <Link to={`/turf/${turfSlug}`} className="block relative group shrink-0">
           <div 
             className="h-44 bg-gray-200 dark:bg-gray-700 relative bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-            style={{ backgroundImage: `url('${placeholderImage}')` }}
+            style={{ backgroundImage: `url('${turf.image || placeholderImage}')` }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
             
@@ -96,7 +115,11 @@ export default function TurfCard({ turf }) {
 
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100 dark:border-gray-700">
             {turf.phone ? (
-              <a href={`tel:${turf.phone}`} className="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 rounded-lg text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+              <a 
+                href={`tel:${turf.phone}`} 
+                onClick={handleCallClick} // Track Call Click
+                className="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 rounded-lg text-sm font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+              >
                 📞 Call
               </a>
             ) : (
@@ -106,7 +129,13 @@ export default function TurfCard({ turf }) {
             )}
 
             {turf.whatsapp ? (
-              <a href={`https://wa.me/91${turf.whatsapp}?text=Hi,%20I%20saw%20${encodeURIComponent(turf.name)}%20on%20TuKhel%20and%20wanted%20to%20inquire%20about%20slots.`} target="_blank" rel="noreferrer" className="flex items-center justify-center bg-green-600 text-white py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition">
+              <a 
+                href={`https://wa.me/91${turf.whatsapp}?text=Hi,%20I%20saw%20${encodeURIComponent(turf.name)}%20on%20TuKhel%20and%20wanted%20to%20inquire%20about%20slots.`} 
+                onClick={handleWhatsAppClick} // Track WhatsApp Click
+                target="_blank" 
+                rel="noreferrer" 
+                className="flex items-center justify-center bg-green-600 text-white py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition"
+              >
                 💬 WhatsApp
               </a>
             ) : (

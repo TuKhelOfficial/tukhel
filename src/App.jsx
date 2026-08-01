@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import ReactGA from 'react-ga4';
+
+// Component Imports
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import TurfDetailsPage from './pages/TurfDetailsPage';
 import Footer from './components/Footer';
-import ListTurfModal from './components/ListTurfModal'; // Import modal here
+import ListTurfModal from './components/ListTurfModal';
+import AnalyticsTracker from './components/AnalyticsTracker'; 
+
+// Initialize Google Analytics with your specific Measurement ID
+ReactGA.initialize("G-H9CYLR4DW6");
 
 function App() {
   // Global state for the List Turf Modal
@@ -12,9 +19,12 @@ function App() {
 
   return (
     <BrowserRouter basename="/tukhel">
+      {/* This invisible component tracks page views automatically */}
+      <AnalyticsTracker />
+
       <div className="min-h-screen flex flex-col relative">
         
-        {/* Pass the open function as a prop */}
+        {/* Pass the open function as a prop to Navbar */}
         <Navbar onOpenListModal={() => setIsListModalOpen(true)} />
 
         <main className="flex-grow">
@@ -41,7 +51,7 @@ function App() {
         <Footer onOpenListModal={() => setIsListModalOpen(true)} />
       </div>
 
-      {/* Render the modal at the root level */}
+      {/* Render the modal at the root level, sitting above all pages */}
       <ListTurfModal 
         isOpen={isListModalOpen} 
         onClose={() => setIsListModalOpen(false)} 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 import logo from '../assets/tukhel-logo.png';
 
-// Accept the onOpenListModal prop
 export default function Navbar({ onOpenListModal }) {
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
 
@@ -21,6 +21,18 @@ export default function Navbar({ onOpenListModal }) {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleListTurfClick = () => {
+    // 1. Send tracking event to Google Analytics
+    ReactGA.event({
+      category: "User Action",
+      action: "Clicked List Your Turf",
+      label: "Navbar Button"
+    });
+    
+    // 2. Open the form modal
+    onOpenListModal();
   };
 
   return (
@@ -46,9 +58,8 @@ export default function Navbar({ onOpenListModal }) {
             {isDarkMode ? '☀️' : '🌙'}
           </button>
 
-          {/* Trigger the prop function on click */}
           <button 
-            onClick={onOpenListModal}
+            onClick={handleListTurfClick}
             className="bg-white text-green-800 dark:bg-green-600 dark:text-white px-4 py-2 rounded-full text-sm font-bold shadow-sm hover:shadow-md hover:scale-105 transition-all"
           >
             List Your Turf

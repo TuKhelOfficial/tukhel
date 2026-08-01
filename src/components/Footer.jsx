@@ -1,8 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 
-// Accept the onOpenListModal prop here
 export default function Footer({ onOpenListModal }) {
+  
+  const handleListTurfClick = () => {
+    // 1. Send tracking event to Google Analytics
+    ReactGA.event({
+      category: "User Action",
+      action: "Clicked List Your Turf",
+      label: "Footer Button"
+    });
+    
+    // 2. Open the form modal
+    onOpenListModal();
+  };
+
+  // --- NEW: Scroll to top handler ---
+  const handleHomeClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // This gives a nice smooth scrolling effect!
+    });
+  };
+
   return (
     <footer className="bg-gray-900 text-white py-10 mt-auto border-t border-gray-800">
       <div className="container mx-auto px-4 max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -15,12 +36,11 @@ export default function Footer({ onOpenListModal }) {
         <div>
           <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
           <ul className="space-y-2 text-sm text-gray-400">
-            <li><Link to="/" className="hover:text-green-400 transition">Home</Link></li>
+            <li><Link to="/" onClick={handleHomeClick} className="hover:text-green-400 transition">Home</Link></li>
             
-            {/* Convert this into a button that triggers the modal */}
             <li>
               <button 
-                onClick={onOpenListModal} 
+                onClick={handleListTurfClick} 
                 className="hover:text-green-400 transition text-left"
               >
                 List Your Turf
