@@ -52,7 +52,7 @@ export default function Footer({ onOpenListModal }) {
 
         <div>
           <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-          <p className="text-sm text-gray-400">Email: support@tukhel.com</p>
+          <p className="text-sm text-gray-400">Email: tukhel.official@gmail.com</p>
           <p className="text-sm text-gray-400 mt-2">📍 Latur, Maharashtra</p>
         </div>
         
