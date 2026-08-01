@@ -8,7 +8,10 @@ import HomePage from './pages/HomePage';
 import TurfDetailsPage from './pages/TurfDetailsPage';
 import Footer from './components/Footer';
 import ListTurfModal from './components/ListTurfModal';
-import AnalyticsTracker from './components/AnalyticsTracker'; 
+import AnalyticsTracker from './components/AnalyticsTracker';
+
+// NEW: Import the ScrollToTop component
+import ScrollToTop from './components/ScrollToTop';
 
 // Initialize Google Analytics with your specific Measurement ID
 ReactGA.initialize("G-H9CYLR4DW6");
@@ -22,8 +25,11 @@ function App() {
       {/* This invisible component tracks page views automatically */}
       <AnalyticsTracker />
 
+      {/* NEW: Place it right here! Now every page change will start at the top */}
+      <ScrollToTop />
+
       <div className="min-h-screen flex flex-col relative">
-        
+
         {/* Pass the open function as a prop to Navbar */}
         <Navbar onOpenListModal={() => setIsListModalOpen(true)} />
 
@@ -52,9 +58,9 @@ function App() {
       </div>
 
       {/* Render the modal at the root level, sitting above all pages */}
-      <ListTurfModal 
-        isOpen={isListModalOpen} 
-        onClose={() => setIsListModalOpen(false)} 
+      <ListTurfModal
+        isOpen={isListModalOpen}
+        onClose={() => setIsListModalOpen(false)}
       />
     </BrowserRouter>
   );
